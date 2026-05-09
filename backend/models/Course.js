@@ -26,6 +26,13 @@ const courseSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
         },
+
+        modules: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Module",
+            }
+        ]
     },
     {
         timestamps: true,

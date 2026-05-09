@@ -47,3 +47,77 @@ export const getAllCourses = async(req, res) => {
         })
     }
 }
+
+export const getSingleCourse = async(req, res) =>{
+    try{
+
+        const course = await Course.findById(req.params.id)
+        .populate("createdBy","name email")
+
+        if(!course){
+            return res.status(400).json({
+                message: "Course not found",
+            })
+        }
+
+        res.status(200).json(course)
+    }catch(error){
+        res.status(500).json({
+            message: "Server Error",
+            error: error.message,
+        })
+    }
+}
+
+export const updateCourse = async(req, res)=>{
+    try{
+        const {title, description, price, thumbnail } = req.body;
+        const course = await Course.findById(req.params.id);
+
+        if(!course){
+            return res.status(404).json({
+                message: "Course not found",
+            })
+        }
+
+        course.title = title || course.title;
+        course.description = description || course.description;
+        course.price = price || course.price;
+        course.thumbnail = thumbnail || course.thumbnail;
+
+        const updatedCourse = await course.save();
+
+        res.status(200).json({
+            message: "Course updated successfully",
+            updatedCourse,
+        })
+    }catch(error){
+        return res.status(500).json({
+            message: "Server Error",
+            error: error.message,
+        })
+    }
+}
+
+export const deleteCourse = async(req,res) =>{
+    try{
+        const course = await Course.findById(req.params.id);
+
+        if(!course){
+            return res.status(404).json({
+                message: "Course not found",
+            })
+        }
+
+        await course.deleteOne();
+
+        res.status(200).json({
+            message: "Course deleted successfully",
+        })
+    }catch(error){
+        return res.status(500).json({
+            message: "Server Error",
+            error: error.message,
+        })
+    }
+}

@@ -6,6 +6,7 @@ import authRoutes from "./routes/authRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js"
 import moduleRoutes from "./routes/moduleRoutes.js";
 import lessonRoutes from "./routes/lessonRoutes.js";
+import enrollmentRoutes from "./routes/enrollmentRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -19,6 +20,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/modules", moduleRoutes);
 app.use("/api/lessons",lessonRoutes);
+app.use("/api/enrollment", enrollmentRoutes);
 
 app.get("/", (req,res)=>{
     res.send("Backend is running")

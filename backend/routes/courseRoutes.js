@@ -1,10 +1,11 @@
 import express from "express";
-import { createCourse, getAllCourses, getSingleCourse, updateCourse, deleteCourse} from "../controllers/courseController.js";
+import { createCourse, getAllCourses, getSingleCourse, updateCourse, deleteCourse, getFullCourse} from "../controllers/courseController.js";
 import { protect , adminOnly} from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
 router.get("/", getAllCourses);
+router.get("/full/:id",getFullCourse);
 router.get("/:id",getSingleCourse);
 router.put("/:id", protect, adminOnly, updateCourse);
 router.post("/", protect, adminOnly, createCourse);

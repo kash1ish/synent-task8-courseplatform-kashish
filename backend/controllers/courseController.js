@@ -69,6 +69,32 @@ export const getSingleCourse = async(req, res) =>{
     }
 }
 
+export const getFullCourse = async(req, res) => {
+    try{
+        const course = await Course.findById(req.params.id)
+        .populate("createdBy", "name email")
+        .populate({
+            path: "modules",
+            populate: {
+                path: "lessons",
+            },
+        })
+
+        if(!course){
+            return res.status(404).json({
+                message: "Course not found",
+            })
+        }
+
+        res.status(200).json(course)
+    }catch(error){
+        res.status(500).json({
+            message: "Server Error",
+            error: erro.message,
+        })
+    }
+}
+
 export const updateCourse = async(req, res)=>{
     try{
         const {title, description, price, thumbnail } = req.body;

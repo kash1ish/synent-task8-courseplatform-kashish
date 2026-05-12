@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import Enrollment from "../models/Enrollment.js";
 
 export const protect = async(req, res, next) =>{
     let token;
@@ -34,6 +35,30 @@ export const adminOnly = async(req, res, next) =>{
     }else{
         return res.status(403).json({
             message: "Admin access only",
+        })
+    }
+}
+
+export const isEnrolled = async(req, res, next) =>{
+    try{
+        const courseId = req.params.courseId;
+
+        const enrollment = await Enrollment.findOne({
+            userId: req.user._id,
+            courseId,
+        })
+
+        if(!enrollment){
+            return res.status(403).json({
+                message: "Access denied. Please enroll"
+            })
+        }
+
+        next();
+    }catch(error){
+        return res.status(500).json({
+            message: "Server Error",
+            error: error.message
         })
     }
 }
